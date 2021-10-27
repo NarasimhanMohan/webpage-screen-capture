@@ -56,7 +56,7 @@ public class CaptureController {
 	public ResponseEntity<byte[]> captureScreen(@RequestBody UrlDetails urlDetails) throws IOException
 	{
 		//Setting Property for chrome Driver
-		System.setProperty("webdriver.chrome.driver","F:\\Spring Workspace\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver.exe");
 		// Setting your Chrome options (Desired capabilities)
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--headless");  
@@ -74,7 +74,7 @@ public class CaptureController {
 		//Close the Driver
 		driver.close();
 		//Reading the screenshotted file
-		var imgFile = new ClassPathResource("/screenshot.jpg");
+		var imgFile = new ClassPathResource("screenshot.jpg");
 		//Converting them into byte array
         byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
 
