@@ -1,0 +1,17 @@
+package com.webpagescreencapture.app.ws.ui.model.response;
+
+import java.io.File;
+
+public class UrlRest {
+
+	private File Url;
+
+	public File getUrl() {
+		return Url;
+	}
+
+	public void setUrl(File url) {
+		this.Url = url;
+	}
+	
+}

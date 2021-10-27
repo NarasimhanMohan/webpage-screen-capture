@@ -1,0 +1,88 @@
+package com.webpagescreencapture.app.ws.ui.controller;
+
+
+
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.gargoylesoftware.htmlunit.javascript.host.html.Image;
+import com.webpagescreencapture.app.ws.ui.model.request.UrlDetails;
+import com.webpagescreencapture.app.ws.ui.model.response.UrlRest;
+
+@RestController
+@RequestMapping("")
+public class CaptureController {
+
+	@PostMapping(consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
+			produces= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<UrlRest> captureScreen(@RequestBody UrlDetails urlDetails) throws IOException
+	{
+		UrlRest urlResp = new UrlRest();
+		
+		
+		
+		
+		System.setProperty("webdriver.gecko.driver","F:\\Spring Workspace\\geckodriver.exe");
+		// Setting your Chrome options (Desired capabilities)
+		//ChromeOptions options = new ChromeOptions();
+		//options.addArguments("--headless");
+		//options.addArguments("--start-maximized");
+		//options.addArguments("--start-fullscreen");*/
+
+		WebDriver driver = new FirefoxDriver();
+		driver.get(urlDetails.getUrl());
+		byte[] imageBytes = ((FirefoxDriver)driver).getFullPageScreenshotAs(OutputType.BYTES);
+		Files.write(Paths.get(RESULT_FILENAME), imageBytes);
+		//File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		// Now you can do whatever you need to do with it, for example copy somewhere
+		//FileUtils.copyFile(scrFile, new File("c:\\tmp\\screenshot.png"));
+		driver.close();
+		/*try {
+			URL url = new URL(urlDetails.getUrl());
+			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+			BufferedImage image = ImageIO.write(image, "JPEG", "saved.png");
+		    reader.close();
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		//File url = urlDetails.getUrl();
+		urlResp.setUrl(urlDetails.getUrl());
+		//BufferedImage image = ImageIO.write(url);
+	    //return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+		//Bitmap  image=BitmapFactory.decodeStream(url.openConnection().getInputStream());
+		
+		
+		return new ResponseEntity<UrlRest>(urlResp, HttpStatus.OK);
+	}
+}

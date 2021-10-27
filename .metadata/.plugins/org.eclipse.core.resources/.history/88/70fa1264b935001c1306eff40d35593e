@@ -1,0 +1,15 @@
+package com.webpagescreencapture.app.ws.ui.model.request;
+
+public class UrlDetails {
+
+	private String Url;
+
+	public String getUrl() {
+		return Url;
+	}
+
+	public void setUrl(String url) {
+		Url = url;
+	}
+	
+}
